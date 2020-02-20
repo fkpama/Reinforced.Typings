@@ -21,7 +21,7 @@ namespace Reinforced.Typings.Generators
         public ExportContext Context { get; set; }
 
         /// <summary>
-        /// Generate method implementation. 
+        /// Generate method implementation.
         /// Calls GenerateNode inside, creates node dummy, sets and resets location
         /// </summary>
         /// <param name="element">Reflection element instance</param>
@@ -38,6 +38,10 @@ namespace Reinforced.Typings.Generators
                     Context.Location.SetCurrentType((Type)(object)element);
                 }
                 var result = GenerateNode(element, currentNode, resolver);
+                if (Context.CurrentBlueprint.IsConst() && result is RtMember member)
+                {
+                    member.ConstMember = true;
+                }
                 Context.Location.ResetLocation(currentNode);
                 if (element is Type)
                 {
@@ -54,7 +58,7 @@ namespace Reinforced.Typings.Generators
         }
 
         /// <summary>
-        /// Main entry point for resulting node generation.  
+        /// Main entry point for resulting node generation.
         /// </summary>
         /// <param name="element">Reflection element</param>
         /// <param name="node">Resulting node to be modified</param>

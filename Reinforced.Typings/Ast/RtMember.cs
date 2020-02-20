@@ -36,5 +36,9 @@
                 _order = value;
             }
         }
+
+        public bool ConstMember { get; internal set; }
+
+        public bool IsLast { get; internal set; }
     }
 }

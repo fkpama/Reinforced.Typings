@@ -34,6 +34,11 @@ namespace Reinforced.Typings.Ast
         public bool Abstract { get; set; }
 
         /// <summary>
+        /// Gets or sets where the class is exported as a const variable
+        /// </summary>
+        public bool Const { get; internal set; }
+
+        /// <summary>
         /// Constructs new instance of AST node
         /// </summary>
         public RtClass()

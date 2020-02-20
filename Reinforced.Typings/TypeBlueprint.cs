@@ -35,7 +35,8 @@ namespace Reinforced.Typings
             ThirdPartyReferences = new List<RtReference>();
             TypeAttribute = Type.GetCustomAttribute<TsEnumAttribute>(false)
                             ?? Type.GetCustomAttribute<TsInterfaceAttribute>(false)
-                            ?? (TsDeclarationAttributeBase)Type.GetCustomAttribute<TsClassAttribute>(false);
+                            ?? (TsDeclarationAttributeBase)Type.GetCustomAttribute<TsClassAttribute>(false)
+                            ?? Type.GetCustomAttribute<TsConstAttribute>(false);
             IsExportedExplicitly = TypeAttribute != null;
             _thirdPartyAttribute = Type.GetCustomAttribute<TsThirdPartyAttribute>();
             InitFromAttributes();
@@ -65,7 +66,7 @@ namespace Reinforced.Typings
             Imports.AddRange(typeImports);
 
             InitThirdPartyImports();
-            
+
         }
 
         private void InitThirdPartyImports()
@@ -717,7 +718,7 @@ namespace Reinforced.Typings
 
             if (genericArguments == null) genericArguments = t.SerializeGenericArguments();
 
-            
+
             return new RtSimpleTypeName(name, genericArguments);
         }
         #endregion
@@ -729,10 +730,14 @@ namespace Reinforced.Typings
         /// <returns>True, when hierarchy must be flatten, false otherwise</returns>
         public bool IsFlatten()
         {
+            if (Attr<TsConstAttribute>() != null)
+                return true;
             var tc = Attr<TsClassAttribute>();
             var ti = Attr<TsInterfaceAttribute>();
             return tc != null ? tc.FlattenHierarchy : ti != null ? ti.FlattenHierarchy : false;
         }
+
+        public bool IsConst() => Attr<TsConstAttribute>() != null;
 
         #region Is exported (as)
 

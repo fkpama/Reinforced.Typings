@@ -9,12 +9,14 @@ namespace Reinforced.Typings.Visitors.TypeScript
             if (node == null) return;
             Visit(node.Documentation);
             AppendTabs();
-            if (Context != WriterContext.Interface)
+            if (Context != WriterContext.Interface && !node.ConstMember)
             {
                 Decorators(node);
                 Modifiers(node);
             }
             Visit(node.Identifier);
+            WriteIf(node.ConstMember, ": function");
+
             Write("(");
             SequentialVisit(node.Arguments, ", ");
             Write(") ");
@@ -38,6 +40,11 @@ namespace Reinforced.Typings.Visitors.TypeScript
                 {
                     EmptyBody(node.ReturnType);
                 }
+            }
+
+            if (!node.IsLast && node.ConstMember)
+            {
+                Write(",");
             }
 
             if (!string.IsNullOrEmpty(node.LineAfter))

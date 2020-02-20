@@ -32,6 +32,5 @@ namespace Reinforced.Typings.Attributes
         /// </summary>
         bool AutoExportConstructors { get; }
 
-        
     }
 }

@@ -14,8 +14,18 @@ namespace Reinforced.Typings.Visitors.TypeScript
             AppendTabs();
             Decorators(node);
             if (node.Export) Write("export ");
-            if (node.Abstract) Write("abstract ");
-            Write("class ");
+            if (node.Abstract)
+            {
+                if (node.Const)
+                {
+                    Write("const ");
+                }
+                else
+                {
+                    Write("abstract ");
+                }
+            }
+            else Write("class ");
             Visit(node.Name);
             if (node.Extendee != null)
             {
@@ -27,7 +37,14 @@ namespace Reinforced.Typings.Visitors.TypeScript
                 Write(" implements ");
                 SequentialVisit(node.Implementees, ", ");
             }
-            Br(); AppendTabs();
+            if (node.Const)
+            {
+                Write(" = ");
+            }
+            else
+            {
+                Br(); AppendTabs();
+            }
             Write("{"); Br();
             Tab();
             var members = DoSortMembers(node.Members);
@@ -36,7 +53,19 @@ namespace Reinforced.Typings.Visitors.TypeScript
                 Visit(rtMember);
             }
             UnTab();
-            AppendTabs(); WriteLine("}");
+            if (!node.Const)
+            {
+                AppendTabs();
+                WriteLine("}");
+            }
+            else
+            {
+                WriteLine("};");
+                Write($"Object.freeze(");
+                Visit(node.Name);
+                WriteLine(");");
+            }
+            Br();
             Context = prev;
         }
 

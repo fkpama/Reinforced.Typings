@@ -86,6 +86,10 @@ namespace Reinforced.Typings.Visitors
             }
         }
 
+        protected void WriteIf(bool cond, string text)
+        {
+            if (cond) Write(text);
+        }
         protected void Write(string text)
         {
             _writer.Write(text);

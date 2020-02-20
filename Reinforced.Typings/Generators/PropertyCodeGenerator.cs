@@ -12,7 +12,7 @@ namespace Reinforced.Typings.Generators
     /// </summary>
     public class PropertyCodeGenerator : TsCodeGeneratorBase<MemberInfo, RtField>
     {
-        private bool HasToBeNullable(TsPropertyAttribute tp, Type propType)
+        private bool HasToBeNullable(TsExtendedMemberAttributeBase tp, Type propType)
         {
             var hasNullable = tp != null && tp.NilForceNullable.HasValue;
             if (hasNullable)
@@ -52,7 +52,7 @@ namespace Reinforced.Typings.Generators
             RtTypeName type = null;
             var propName = new RtIdentifier(element.Name);
             bool isNameOverridden = false;
-            var tp = Context.CurrentBlueprint.ForMember<TsPropertyAttribute>(element);
+            var tp = Context.CurrentBlueprint.ForMember<TsExtendedMemberAttributeBase>(element);
 
             if (tp != null)
             {
@@ -73,14 +73,14 @@ namespace Reinforced.Typings.Generators
                     isNameOverridden = true;
                 }
             }
-            
+
             if (!Context.SpecialCase)
             {
                 propName.IsNullable = HasToBeNullable(tp, t);
             }
 
             if (type == null) type = resolver.ResolveTypeName(t);
-            
+
             if (!isNameOverridden)
             {
                 if (element is PropertyInfo)
@@ -111,7 +111,7 @@ namespace Reinforced.Typings.Generators
         /// <param name="resolver">Type resolver</param>
         /// <param name="memberType">Field/property type</param>
         /// <param name="attr">Attribute</param>
-        protected virtual void FillInitialization(MemberInfo element, RtField result, TypeResolver resolver, Type memberType, TsPropertyAttribute attr)
+        protected virtual void FillInitialization(MemberInfo element, RtField result, TypeResolver resolver, Type memberType, TsExtendedMemberAttributeBase attr)
         {
             bool exportConstant = true;
             if (attr != null) exportConstant = attr.Constant;
@@ -181,7 +181,7 @@ namespace Reinforced.Typings.Generators
         }
 
         /// <summary>
-        /// Retrieves static value 
+        /// Retrieves static value
         /// </summary>
         /// <param name="element"></param>
         /// <returns></returns>

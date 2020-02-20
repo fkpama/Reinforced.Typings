@@ -199,7 +199,7 @@ namespace Reinforced.Typings.Generators
 
                 if ((!bp.IsExportingAsInterface()) && baseBp.IsExportingAsInterface())
                 {
-                    // well.. bad but often case. 
+                    // well.. bad but often case.
                     // Here we should export members also for base class
                     // we do not export methods - just properties and fields
                     // but still. It is better thatn nothing

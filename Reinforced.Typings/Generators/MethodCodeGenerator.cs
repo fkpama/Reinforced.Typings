@@ -69,6 +69,7 @@ namespace Reinforced.Typings.Generators
             {
                 result.Body = new RtRaw(fa.Implementation);
             }
+
             AddDecorators(result, Context.CurrentBlueprint.DecoratorsFor(element));
             return result;
         }

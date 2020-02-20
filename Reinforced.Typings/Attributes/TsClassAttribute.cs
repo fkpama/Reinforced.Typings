@@ -5,8 +5,8 @@ namespace Reinforced.Typings.Attributes
     /// <summary>
     ///     This attribute will export member as typescript class definition
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-    public class TsClassAttribute : TsDeclarationAttributeBase, IAutoexportSwitchAttribute
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false)]
+    public class TsClassAttribute : TsDeclarationAttributeBase, IClassAutoExportSwitchAttribute
     {
         /// <summary>
         ///     Constructs new instance of TsClassAttribute
@@ -46,7 +46,7 @@ namespace Reinforced.Typings.Attributes
         /// </summary>
         public virtual bool AutoExportConstructors { get; set; }
 
-        
+
 
         /// <summary>
         /// Gets or sets whether class is being exported as abstract or not.

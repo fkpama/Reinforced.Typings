@@ -12,17 +12,33 @@ namespace Reinforced.Typings.Visitors.TypeScript
             if (Context != WriterContext.Interface)
             {
                 Decorators(node);
-                Modifiers(node);
+                if (!node.ConstMember)
+                {
+                    Modifiers(node);
+                }
             }
             Visit(node.Identifier);
-            Write(": ");
-            Visit(node.Type);
+            if (!node.ConstMember)
+            {
+                Write(": ");
+                Visit(node.Type);
+            }
             if (!string.IsNullOrEmpty(node.InitializationExpression))
             {
-                Write(" = ");
+                if (!node.ConstMember)
+                {
+                    Write(" = ");
+                }
+                else
+                {
+                    Write(": ");
+                }
                 Write(node.InitializationExpression);
             }
-            Write(";");
+
+            WriteIf(!node.ConstMember, ";");
+            WriteIf(node.ConstMember && !node.IsLast, ",");
+
             Br();
             if (!string.IsNullOrEmpty(node.LineAfter))
             {

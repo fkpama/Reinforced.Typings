@@ -382,6 +382,12 @@ namespace Reinforced.Typings
             where T : MemberInfo
         {
             var declaredFlags = publicOnly ? PublicMembersFlags : MembersFlags;
+            var isConst = t.IsConst();
+
+            if (isConst)
+            {
+                declaredFlags |= BindingFlags.Static;
+            }
 
             T[] baseSet = null;
             baseSet = flattenHierarchy ?
@@ -389,6 +395,12 @@ namespace Reinforced.Typings
                 : membersGetter(t.Type, declaredFlags);
 
             var allMembers = baseSet.Where(x => (x.GetCustomAttribute<CompilerGeneratedAttribute>() == null) && !t.IsIgnored(x)).OfType<T>();
+            if (isConst && typeof(T) == typeof(FieldInfo))
+            {
+                allMembers
+                    .OfType<FieldInfo>()
+                    .Where(fi => fi.IsLiteral && !fi.IsInitOnly);
+            }
             return allMembers.ToArray();
         }
 

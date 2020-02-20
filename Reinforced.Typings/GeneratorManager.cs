@@ -14,6 +14,7 @@ namespace Reinforced.Typings
     {
         private readonly ITsCodeGenerator<Type> _defaultClassGenerator;
         private readonly ITsCodeGenerator<Type> _defaultEnumGenerator;
+        private readonly ITsCodeGenerator<Type> _defaultConstGenerator;
         private readonly Dictionary<MemberTypes, object> _defaultGenerators = new Dictionary<MemberTypes, object>();
         private readonly ITsCodeGenerator<Type> _defaultInterfaceGenerator;
         private readonly NamespaceCodeGenerator _defaultNsgenerator;
@@ -33,6 +34,7 @@ namespace Reinforced.Typings
             _defaultInterfaceGenerator = new InterfaceCodeGenerator { Context = context };
             _defaultEnumGenerator = new EnumGenerator { Context = context };
             _defaultNsgenerator = new NamespaceCodeGenerator { Context = context };
+            _defaultConstGenerator = new ConstCodeGenerator { Context = context };
             _context = context;
         }
 
@@ -91,10 +93,12 @@ namespace Reinforced.Typings
             var isClass = attr is TsClassAttribute;
             var isInterface = attr is TsInterfaceAttribute;
             var isEnum = attr is TsEnumAttribute;
+            var isConst = attr is TsConstAttribute;
 
             if (isClass) return _defaultClassGenerator;
             if (isInterface) return _defaultInterfaceGenerator;
             if (isEnum) return _defaultEnumGenerator;
+            if (isConst) return _defaultConstGenerator;
             return null;
         }
 

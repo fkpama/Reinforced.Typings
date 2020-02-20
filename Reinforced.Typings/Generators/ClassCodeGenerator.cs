@@ -20,13 +20,14 @@ namespace Reinforced.Typings.Generators
         {
 
             var clsbp = Context.Project.Blueprint(element);
-            var tc = Context.Project.Blueprint(element).Attr<TsClassAttribute>();
+            var tc = (IClassAutoExportSwitchAttribute)Context.Project.Blueprint(element).Attr<TsClassAttribute>()
+                ?? Context.Project.Blueprint(element).Attr<TsConstAttribute>();
             if (tc == null) throw new ArgumentException("TsClassAttribute is not present", "element");
             Export(result, element, resolver, tc);
             AddDecorators(result, clsbp.GetDecorators());
             if (!tc.IsAbstract.HasValue)
             {
-                result.Abstract = element._IsAbstract() && !element._IsInterface();
+                result.Abstract = result.Const && element._IsAbstract() && !element._IsInterface();
             }
             else
             {
